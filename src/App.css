@@ -1,22 +1,12 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: Metrickal;
+  src: url(./Metrickal-Regular.otf);
 }
-
-.App-logo {
-  height: 40vmin;
+* {
+  box-sizing: border-box;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
+body {
+  line-height: 1.2;
+  margin: 0;
+  font-family: Metrickal, monospace;
 }
