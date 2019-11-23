@@ -37,7 +37,9 @@ export default class Engine {
       const destinationX = this.player.x + dx;
       const destinationY = this.player.y + dy;
 
-      this.player.move(dx, dy);
+      if(! this.level.blocksMoveAt(destinationX, destinationY) ) {
+        this.player.move(dx, dy);
+      }
     }
 
     renderMap(this.mapDisplay, this.level, this.entities);

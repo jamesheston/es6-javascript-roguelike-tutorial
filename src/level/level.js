@@ -21,4 +21,8 @@ export default class Level {
 
     return tiles;
   }
+
+  blocksMoveAt(x, y) {
+    return this.tiles[`${x},${y}`].blocksMove;
+  }
 }
