@@ -5,9 +5,13 @@ import Entity from '../entity/entity';
 import {colors} from '../ui/colors';
 import {renderMap} from '../ui/renderMap';
 import Level from '../level/level';
+import {setRNGSeed} from '../lib/randomUtil';
 
 export default class Engine {
   constructor() {
+    // init and log rot.js random number generator seed for debugging
+    setRNGSeed();
+
     this.mapDisplay = new ROT.Display({
       width: constants.MAP_WIDTH,
       height: constants.MAP_HEIGHT,
@@ -15,14 +19,11 @@ export default class Engine {
     }); 
     document.querySelector('#root').appendChild(this.mapDisplay.getContainer());
 
-    // Initially, place player in the center of the map.
-    const playerX = Math.floor(constants.MAP_WIDTH / 2) - 1;
-    const playerY = Math.floor(constants.MAP_HEIGHT / 2) - 1;    
-    this.player = new Entity('Player', playerX, playerY, '@', colors.WHITE);
-    // Create a yellow NPC with a position 5 tiles left of the player.   
-    const npc = new Entity('NPC', playerX - 5, playerY, '@', colors.YELLOW);
+    this.player = new Entity('Player', -1, -1, '@', colors.WHITE);
+    const npc = new Entity('NPC', -1, -1, '@', colors.YELLOW);
     this.entities = [this.player, npc];
     this.level = new Level(constants.MAP_WIDTH, constants.MAP_HEIGHT);
+    this.level.generate(this.player, this.entities);
 
     this.addInputListeners = addInputListeners.bind(this);
     this.addInputListeners();
