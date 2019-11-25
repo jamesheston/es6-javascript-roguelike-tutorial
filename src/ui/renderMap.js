@@ -1,16 +1,22 @@
-export const renderMap = function(mapDisplay, level, entities) {
+export const renderMap = function(mapDisplay, level, entities, fovMap) {
   mapDisplay.clear();
 
-  // Draw all tiles
+  // Draw tiles
   for( let x = 0; x < level.width; x++ ) {
     for( let y = 0; y < level.height; y++ ) {
       const tile = level.tiles[`${x},${y}`];
-      mapDisplay.draw( x, y, tile.char, tile.color );
+      const isVisible = fovMap.indexOf(`${x},${y}`) !== -1;
+      if( isVisible ) {
+        mapDisplay.draw(x, y, tile.char, tile.color);
+      }
     }
   }
 
-  // Draw all entities
+  // Draw entities
   for( const entity of entities ) {
-    mapDisplay.draw( entity.x, entity.y, entity.char, entity.color );
+    const isVisible = fovMap.indexOf(`${entity.x},${entity.y}`) !== -1;
+    if( isVisible ) {
+      mapDisplay.draw(entity.x, entity.y, entity.char, entity.color);
+    }
   }
 };

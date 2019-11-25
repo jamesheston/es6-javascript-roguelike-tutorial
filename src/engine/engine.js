@@ -6,6 +6,7 @@ import {colors} from '../ui/colors';
 import {renderMap} from '../ui/renderMap';
 import Level from '../level/level';
 import {setRNGSeed} from '../lib/randomUtil';
+import {initFovComputer, computeFov} from '../lib/fov';
 
 export default class Engine {
   constructor() {
@@ -25,6 +26,12 @@ export default class Engine {
     this.level = new Level(constants.MAP_WIDTH, constants.MAP_HEIGHT);
     this.level.generate(this.player, this.entities);
 
+    this.fov = {};
+    this.fov.radius = 10;
+    initFovComputer(this.level);
+    this.fov.map = computeFov(this.player.x, this.player.y, this.fov.radius);
+    this.fov.needsRecompute = true;
+
     this.addInputListeners = addInputListeners.bind(this);
     this.addInputListeners();
 
@@ -40,9 +47,14 @@ export default class Engine {
 
       if(! this.level.blocksMoveAt(destinationX, destinationY) ) {
         this.player.move(dx, dy);
+        this.fov.needsRecompute = true;
       }
     }
 
-    renderMap(this.mapDisplay, this.level, this.entities);
+    if( this.fov.needsRecompute ) {
+      this.fov.map = computeFov(this.player.x, this.player.y, this.fov.radius);
+    }
+
+    renderMap(this.mapDisplay, this.level, this.entities, this.fov.map);
   }
 }
