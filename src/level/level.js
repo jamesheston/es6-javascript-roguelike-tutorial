@@ -30,8 +30,8 @@ export default class Level {
 
     for( let i = 0; i < MAX_ROOMS; i++ ) {
       // generate a room of random width and height within size constraints
-      const w = randInt(ROOM_MIN_SIZE, ROOM_MIN_SIZE);
-      const h = randInt(ROOM_MIN_SIZE, ROOM_MIN_SIZE);
+      const w = randInt(ROOM_MIN_SIZE, ROOM_MAX_SIZE);
+      const h = randInt(ROOM_MIN_SIZE, ROOM_MAX_SIZE);
       // place it on a random position within map boundries
       const x = randInt(0, this.width - w - 1);
       const y = randInt(0, this.height - h - 1);
