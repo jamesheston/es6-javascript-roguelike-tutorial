@@ -10,7 +10,8 @@ export const renderMap = function(mapDisplay, level, entities, fovMap) {
     for( let y = 0; y < level.height; y++ ) {
       const tile = level.tiles[`${x},${y}`];
       const isVisible = fovMap.indexOf(`${x},${y}`) !== -1;
-      if( isVisible ) {
+      // if( isVisible ) {
+      if( true ) {
         mapDisplay.draw(x, y, tile.char, tile.color);
         tile.explored = true;
       } else {
@@ -24,7 +25,8 @@ export const renderMap = function(mapDisplay, level, entities, fovMap) {
   // Draw entities
   for( const entity of entities ) {
     const isVisible = fovMap.indexOf(`${entity.x},${entity.y}`) !== -1;
-    if( isVisible ) {
+    // if( isVisible ) {
+    if( true ) {
       mapDisplay.draw(entity.x, entity.y, entity.char, entity.color);
     }
   }

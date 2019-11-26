@@ -1,10 +1,13 @@
 import Tile, {tileDict} from './tile';
 import Rectangle from './rectangle';
 import {randInt} from '../lib/randomUtil';
+import {colors} from '../ui/colors';
+import Actor from '../entity/actor/actor';
 
 const ROOM_MAX_SIZE = 10;
 const ROOM_MIN_SIZE = 6;
 const MAX_ROOMS = 30;
+const MAX_ENEMIES_PER_ROOM = 3;
 
 export default class Level {
   constructor(width, height) {
@@ -20,7 +23,6 @@ export default class Level {
         tiles[`${x},${y}`] = new Tile( tileDict['dungeon wall'] );
       }
     }
-
     return tiles;
   }
 
@@ -30,8 +32,8 @@ export default class Level {
 
     for( let i = 0; i < MAX_ROOMS; i++ ) {
       // generate a room of random width and height within size constraints
-      const w = randInt(ROOM_MIN_SIZE, ROOM_MIN_SIZE);
-      const h = randInt(ROOM_MIN_SIZE, ROOM_MIN_SIZE);
+      const w = randInt(ROOM_MIN_SIZE, ROOM_MAX_SIZE);
+      const h = randInt(ROOM_MIN_SIZE, ROOM_MAX_SIZE);
       // place it on a random position within map boundries
       const x = randInt(0, this.width - w - 1);
       const y = randInt(0, this.height - h - 1);
@@ -65,18 +67,11 @@ export default class Level {
           this.digHTunnel(prevX, newX, newY);
         }
       }
+      this.addEnemiesToRoom(newRoom, entities);
 
-      // finally, update `rooms` and `numRooms` for later iterations to reference
       numRooms++;
       rooms.push(newRoom);
     }
-    
-    // Place the NPC in the middle of the last room
-    const lastRoom = rooms[rooms.length - 1];
-    const [centerX, centerY] = lastRoom.center();
-    const npc = entities.find( e => e.name === 'NPC');
-    npc.x = centerX;
-    npc.y = centerY;
   }
 
   digRoom(room) {
@@ -99,7 +94,39 @@ export default class Level {
     } 
   }
 
+  addEnemiesToRoom(room, entities) {
+    const numOfEnemies = randInt(0, MAX_ENEMIES_PER_ROOM);
+  
+    for( let i = 0; i < numOfEnemies; i++ ) {
+      // Choose a random tile in the room to place the new enemy.
+      const x = randInt(room.x1 + 1, room.x2 - 1);
+      const y = randInt(room.y1 + 1, room.y2 - 1);
+      
+      // Only add this enemy if no other entity is already occupying the tile 
+      // at x, y.
+      if(! entities.some( e => e.x === x && e.y === y ) ) {
+        let enemy;
+        // 80% chance new enemy is an orc, 20% chance it's a troll
+        if( randInt(1, 100) <= 80 ) {
+          enemy = new Actor('orc', x, y, 'o', colors.DESATURATED_GREEN);
+        } else {
+          enemy = new Actor('troll', x, y, 'T', colors.DARKER_GREEN);
+        }
+        entities.push(enemy);
+      }
+    }
+  }
+
   blocksMoveAt(x, y) {
     return this.tiles[`${x},${y}`].blocksMove;
   }
+}
+
+export const getBlockingActorAtTile = function(actors, x, y) {
+  for( const actor of actors ) {
+    if( actor.x === x && actor.y === y && actor.blocksMove) {
+      return actor;
+    }
+  }
+  return false;
 }
