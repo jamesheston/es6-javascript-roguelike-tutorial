@@ -1,3 +1,7 @@
+import {colors} from './colors';
+
+const EXPLORED_TILE_COLOR = colors.DARKER_BLUE;
+
 export const renderMap = function(mapDisplay, level, entities, fovMap) {
   mapDisplay.clear();
 
@@ -8,6 +12,11 @@ export const renderMap = function(mapDisplay, level, entities, fovMap) {
       const isVisible = fovMap.indexOf(`${x},${y}`) !== -1;
       if( isVisible ) {
         mapDisplay.draw(x, y, tile.char, tile.color);
+        tile.explored = true;
+      } else {
+        if( tile.explored ) {
+          mapDisplay.draw(x, y, tile.char, EXPLORED_TILE_COLOR);
+        }
       }
     }
   }

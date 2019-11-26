@@ -15,6 +15,8 @@ export default class Tile {
     this.color = color;
     this.blocksMove = blocksMove;
     this.blocksSight = blocksSight;
+    
+    this.explored = false;
   }
 }
 
