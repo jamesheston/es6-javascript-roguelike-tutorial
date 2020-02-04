@@ -1,47 +1,35 @@
-import * as ROT from 'rot-js';
+// import * as ROT from 'rot-js';
 import {addInputListeners} from '../ui/addInputListeners';
-import {constants} from '../lib/constants';
+// import {constants} from '../lib/constants';
 import Actor from '../entity/actor/actor';
-import {colors} from '../ui/colors';
+// import {colors} from '../ui/colors';
 import {renderMap} from '../ui/renderMap';
-import Level from '../level/level';
-import {setRNGSeed} from '../lib/randomUtil';
-import {initFovComputer, computeFov} from '../lib/fov';
+// import Level from '../level/level';
+// import {setRNGSeed} from '../lib/randomUtil';
+import {computeFov} from '../lib/fov';
 import {getBlockingActorAtTile} from '../level/level';
 import {EngineModes} from './engineModes';
-import Combat from '../entity/actor/components/combat';
+// import Combat from '../entity/actor/components/combat';
 import {killPlayer, killActor} from '../entity/actor/killActor';
+import {initNewGame} from './initNewGame';
+import {initUi} from '../ui/initUi';
 
 export default class Engine {
   constructor() {
-    // init and log rot.js random number generator seed for debugging
-    setRNGSeed();
-
-    this.mapDisplay = new ROT.Display({
-      width: constants.MAP_WIDTH,
-      height: constants.MAP_HEIGHT,
-      fontFamily: 'metrickal, monospace',
-    }); 
-    document.querySelector('#root').appendChild(this.mapDisplay.getContainer());
-
-    // create player
-    const combat = new Combat(30, 2, 5);
-    this.player = new Actor('Player', 0, 0, '@', colors.WHITE, { combat });
-    
-    this.entities = [this.player];
-
-    this.level = new Level(constants.MAP_WIDTH, constants.MAP_HEIGHT);
-    this.level.generate(this.player, this.entities);
-
-    this.fov = {};
-    this.fov.radius = 10;
-    initFovComputer(this.level);
-    this.fov.map = computeFov(this.player.x, this.player.y, this.fov.radius);
-    this.fov.needsRecompute = true;
-
-    this.engineMode = EngineModes.PLAYER_TURN;
-
     this.addInputListeners = addInputListeners.bind(this);
+
+    [
+      this.mapDisplay,
+    ] = initUi();
+
+    [
+      this.player,
+      this.entities,
+      this.level,
+      this.fov,
+      this.engineMode,
+    ] = initNewGame()
+
     this.addInputListeners();
 
     this.update();
