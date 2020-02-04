@@ -22,7 +22,8 @@ export const renderMap = function(mapDisplay, level, entities, fovMap) {
   }
 
   // Draw entities
-  for( const entity of entities ) {
+  const renderOrderedEntities = entities.sort( (a, b) => a.renderOrder - b.renderOrder );
+  for( const entity of renderOrderedEntities ) {
     const isVisible = fovMap.indexOf(`${entity.x},${entity.y}`) !== -1;
     if( isVisible ) {
       mapDisplay.draw(entity.x, entity.y, entity.char, entity.color);

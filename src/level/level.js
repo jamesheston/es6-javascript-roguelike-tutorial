@@ -3,6 +3,8 @@ import Rectangle from './rectangle';
 import {randInt} from '../lib/randomUtil';
 import {colors} from '../ui/colors';
 import Actor from '../entity/actor/actor';
+import Combat from '../entity/actor/components/combat';
+import {MeleeAttacker} from '../entity/actor/components/ai';
 
 const ROOM_MAX_SIZE = 10;
 const ROOM_MIN_SIZE = 6;
@@ -108,9 +110,15 @@ export default class Level {
         let enemy;
         // 80% chance new enemy is an orc, 20% chance it's a troll
         if( randInt(1, 100) <= 80 ) {
-          enemy = new Actor('orc', x, y, 'o', colors.DESATURATED_GREEN);
+          const combat = new Combat(10, 0, 3);
+          const ai = new MeleeAttacker();
+          enemy = new Actor('orc', x, y, 'o', colors.DESATURATED_GREEN, {combat, ai});
+
         } else {
-          enemy = new Actor('troll', x, y, 'T', colors.DARKER_GREEN);
+          const combat = new Combat(16, 1, 4);
+          const ai = new MeleeAttacker();
+          enemy = new Actor('troll', x, y, 'T', colors.DARKER_GREEN, {combat, ai});
+
         }
         entities.push(enemy);
       }
