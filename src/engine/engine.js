@@ -13,6 +13,7 @@ import {EngineModes} from './engineModes';
 import {killPlayer, killActor} from '../entity/actor/killActor';
 import {initNewGame} from './initNewGame';
 import {initUi} from '../ui/initUi';
+import {MessageLog} from '../lib/messageLog';
 
 export default class Engine {
   constructor() {
@@ -70,11 +71,13 @@ export default class Engine {
       if( deadActor ) {
         if( deadActor === this.player ) {
           [message, this.engineMode] = killPlayer(deadActor);
-        
+          console.log(message);
+          break;
+          
         } else {
           message = killActor(deadActor);
+          console.log(message);
         } 
-        console.log(message);
       }
     }
 
@@ -96,12 +99,13 @@ export default class Engine {
             if( deadActor ) {
               if( deadActor === this.player ) {
                 [message, this.engineMode] = killPlayer(deadActor);
+                console.log(message);
                 break;
 
               } else {
                 message = killActor(deadActor);
+                console.log(message);
               } 
-              console.log(message);
             }
           }
         }

@@ -1,18 +1,19 @@
 import {colors} from '../../ui/colors';
 import {EngineModes} from '../../engine/engineModes';
 import {RenderOrders} from '../../ui/renderOrders';
+import {Message} from '../../lib/messageLog';
 
 export const killPlayer = function(player) {
   player.char = '%';
   player.color = colors.DARK_RED;
   player.renderOrder = RenderOrders.CORPSE;
+  const message = new Message(`The ${player.name} is dead!`, colors.DARK_RED);
 
-  return ['You died!', EngineModes.PLAYER_DEAD];
+  return [message, EngineModes.PLAYER_DEAD];
 };
 
 export const killActor = function(actor) {
-  const actorName = actor.name.slice(0, 1).toUpperCase() + actor.name.slice(1);
-  const message = `${actorName} is dead!`;
+  const message = new Message(`The ${actor.name} is dead!`, colors.DARK_RED);
 
   actor.char = '%';
   actor.color = colors.DARK_RED;

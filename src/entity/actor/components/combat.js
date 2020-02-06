@@ -1,3 +1,5 @@
+import {Message} from '../../../lib/messageLog';
+
 export default class Combat {
   constructor(hp, defense, power) {
     this.maxHp = hp;
@@ -21,14 +23,12 @@ export default class Combat {
     let results = [];
 
     const damage = this.power - target.combat.defense;
-    // capitalize owner name
-    const ownerName = this.owner.name.slice(0, 1).toUpperCase() + this.owner.name.slice(1);
     
     if( damage > 0 ) {
       results = [...results,  ...target.combat.takeDamage(damage)];
-      results.push({ message: `${ownerName} attacks ${target.name}, dealing ${damage} damage.` });
+      results.push({ message: new Message(`The ${this.owner.name} attacks the ${target.name}, dealing ${damage} damage.`) });
     } else {
-      results.push({ message: `${ownerName} attacks ${target.name}, but does no damage.` });
+      results.push({ message: new Message(`The ${this.owner.name} attacks the ${target.name}, but does no damage.`) });
     }
 
     return results;
