@@ -6,6 +6,7 @@ import Level from '../level/level';
 import {initFovComputer, computeFov} from '../lib/fov';
 import {EngineModes} from './engineModes';
 import {constants} from '../lib/constants';
+import {MessageLog} from '../lib/messageLog';
 
 export const initNewGame = function() {
   // init and log rot.js random number generator seed for debugging
@@ -27,6 +28,9 @@ export const initNewGame = function() {
   fov.map = computeFov(player.x, player.y, fov.radius);
   fov.needsRecompute = true;
 
+  // init messageLog 
+  const messageLog = new MessageLog();
+
   const engineMode = EngineModes.PLAYER_TURN;
 
   return [
@@ -34,6 +38,7 @@ export const initNewGame = function() {
     entities,
     level,
     fov,
+    messageLog,
     engineMode,
   ];
 };

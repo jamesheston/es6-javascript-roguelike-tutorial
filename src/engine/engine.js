@@ -13,7 +13,7 @@ import {EngineModes} from './engineModes';
 import {killPlayer, killActor} from '../entity/actor/killActor';
 import {initNewGame} from './initNewGame';
 import {initUi} from '../ui/initUi';
-import {MessageLog} from '../lib/messageLog';
+import {renderMessageLog} from '../ui/renderMessageLog';
 
 export default class Engine {
   constructor() {
@@ -21,6 +21,7 @@ export default class Engine {
 
     [
       this.mapDisplay,
+      this.messageLogMount,
     ] = initUi();
 
     [
@@ -28,6 +29,7 @@ export default class Engine {
       this.entities,
       this.level,
       this.fov,
+      this.messageLog,
       this.engineMode,
     ] = initNewGame()
 
@@ -66,17 +68,17 @@ export default class Engine {
       const deadActor = turnResult.dead;
 
       if( message ) {
-        console.log(message);
+        this.messageLog.add(message);
       }
       if( deadActor ) {
         if( deadActor === this.player ) {
           [message, this.engineMode] = killPlayer(deadActor);
-          console.log(message);
-          break;
+          this.messageLog.add(message);
+          break; // no turn results are processed after the player dies
           
         } else {
           message = killActor(deadActor);
-          console.log(message);
+          this.messageLog.add(message);
         } 
       }
     }
@@ -94,17 +96,17 @@ export default class Engine {
             const deadActor = turnResult.dead;
 
             if( message ) {
-              console.log(message);
+              this.messageLog.add(message);
             }
             if( deadActor ) {
               if( deadActor === this.player ) {
                 [message, this.engineMode] = killPlayer(deadActor);
-                console.log(message);
-                break;
+                this.messageLog.add(message);
+                break; // no turn results are processed after the player dies
 
               } else {
                 message = killActor(deadActor);
-                console.log(message);
+                this.messageLog.add(message);
               } 
             }
           }
@@ -124,7 +126,8 @@ export default class Engine {
     }
 
     renderMap(this.mapDisplay, this.level, this.entities, this.fov.map);
-    
+    renderMessageLog(this.messageLogMount, this.messageLog.messages);
+
     this.fov.needsRecompute = false;
   }
 }

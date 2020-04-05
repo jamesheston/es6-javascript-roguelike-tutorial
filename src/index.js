@@ -1,5 +1,6 @@
 import Engine from './engine/engine';
 import WebFont from 'webfontloader';
+import './lib/reset.css';
 import './ui/app.css';
 
 WebFont.load({
