@@ -1,7 +1,12 @@
 {
-  "name": "es6-javascript-roguelike-tutorial-draft-3",
-  "version": "0.1.0",
+  "name": "html-roguelike-maps",
+  "version": "1.0.0",
+  "description": "A JavaScript roguelike game with HTML5 canvas rendering and procedural map generation",
+  "main": "src/index.js",
   "private": true,
+  "author": "James Heston",
+  "license": "MIT",
+  "keywords": ["roguelike", "javascript", "html5", "canvas", "game", "procedural-generation"],
   "dependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
