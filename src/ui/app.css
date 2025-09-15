@@ -8,13 +8,13 @@
 body {
   margin: 0;
   font-family: Metrickal, monospace;
+  background: #000;
 }
 
 .layout {
   display: flex;
   flex-direction: column;
   width: 800px;
-  background: #000;
 }
 
 .messageLog ul::-webkit-scrollbar {
